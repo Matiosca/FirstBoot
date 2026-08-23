@@ -1,2 +1,2 @@
 # FirstBoot
-A Windows post-installation utility that lets users select and automatically install their preferred applications after a fresh Windows installation.
+First Boot is a Windows desktop application designed to simplify the setup of a freshly installed Windows system. It provides a categorized selection of applications, allowing users to choose individual programs and install them automatically. The application uses WinGet where possible, with support for alternative installation methods for software requiring special handling. It also provides installation status, application information, and automated cleanup of temporary installers.
