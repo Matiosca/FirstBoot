@@ -97,6 +97,10 @@ public partial class MainWindow
         InstallSelectedButton.IsEnabled = false;
         CancelInstallationButton.IsEnabled = true;
 
+        InstallationProgressBar.Minimum = 0;
+        InstallationProgressBar.Maximum = selectedApplications.Count;
+        InstallationProgressBar.Value = 0;
+
         using var cancellation = new CancellationTokenSource();
         _installationCancellation = cancellation;
 
@@ -131,6 +135,7 @@ public partial class MainWindow
                             true));
 
                     application.IsSelected = false;
+                    InstallationProgressBar.Value = index + 1;
                     continue;
                 }
 
@@ -156,6 +161,7 @@ public partial class MainWindow
                 {
                     application.IsSelected = false;
                 }
+                InstallationProgressBar.Value = index + 1;
             }
             catch (OperationCanceledException)
             {
