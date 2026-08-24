@@ -23,6 +23,16 @@ public partial class MainWindow
 
     private CancellationTokenSource? _installationCancellation;
 
+    private void UpdateInstallationStatus(
+    int current,
+    int total,
+    string applicationName,
+    string status)
+    {
+        InstallationStatusText.Text =
+            $"{current} of {total} — {applicationName}: {status}";
+    }
+
     private async void InstallSelectedButton_Click(object sender, RoutedEventArgs e)
     {
         var selectedApplications = ApplicationCatalog.All
@@ -97,13 +107,22 @@ public partial class MainWindow
         {
             var application = selectedApplications[index];
 
-            InstallationStatusText.Text =
-                $"Checking {index + 1} of {selectedApplications.Count}: {application.Name}";
+            UpdateInstallationStatus(
+    index + 1,
+    selectedApplications.Count,
+    application.Name,
+    "Checking...");
 
             try
             {
                 if (await IsApplicationInstalledAsync(application, cancellation.Token))
                 {
+                    UpdateInstallationStatus(
+    index + 1,
+    selectedApplications.Count,
+    application.Name,
+    "Already installed");
+
                     results.Add(
                         new InstallationResult(
                             application.Name,
@@ -115,12 +134,21 @@ public partial class MainWindow
                     continue;
                 }
 
-                InstallationStatusText.Text =
-                    $"Installing {index + 1} of {selectedApplications.Count}: {application.Name}";
+                UpdateInstallationStatus(
+    index + 1,
+    selectedApplications.Count,
+    application.Name,
+    "Installing...");
 
                 var result = await InstallApplicationAsync(
                     application,
                     cancellation.Token);
+
+                UpdateInstallationStatus(
+    index + 1,
+    selectedApplications.Count,
+    application.Name,
+    result.Succeeded ? "Installed" : "Failed");
 
                 results.Add(result);
 
